@@ -62,6 +62,7 @@ jobs:
         script: |
           whoami
           docker pull 953799088616.dkr.ecr.ap-northeast-2.amazonaws.com/github_action_test:latest
-          sudo docker-compose up -d --force-recreate --remove-orphans -t 10
+          sudo docker stop vving
+          sudo docker rm vving
           sudo docker image prune --all --force
           sudo docker run --name "vving" -d --restart always -p 3000:3000 953799088616.dkr.ecr.ap-northeast-2.amazonaws.com/github_action_test:latest
