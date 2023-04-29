@@ -9,7 +9,7 @@ export class Question {
   question: string;
 
   @Column({ type: 'timestamp' })
-  upload_date: Date;
+  used_At: Date;
 
   @CreateDateColumn()
   created_At: Date;
