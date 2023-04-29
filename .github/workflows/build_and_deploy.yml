@@ -1,0 +1,56 @@
+name: build_and_deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+
+  build:
+
+    name: Build Image
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+      
+    - name: Build, tag, and push image to Amazon ECR
+      run: |
+        docker build -t github_action_test .
+        docker tag github_action_test:latest 953799088616.dkr.ecr.ap-northeast-2.amazonaws.com/github_action_test:latest
+        docker push 953799088616.dkr.ecr.ap-northeast-2.amazonaws.com/github_action_test:latest
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          whoami
+          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 953799088616.dkr.ecr.ap-northeast-2.amazonaws.com
+          docker pull 953799088616.dkr.ecr.ap-northeast-2.amazonaws.com/github_action_test:latest
+          sudo docker-compose up -d --force-recreate --remove-orphans -t 10
+          sudo docker image prune --all --force
+          sudo docker run --name "vving" -d --restart always -p 3000:3000 953799088616.dkr.ecr.ap-northeast-2.amazonaws.com/github_action_test:latest
