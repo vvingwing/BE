@@ -1,10 +1,10 @@
-import { Column, Entity, PrimaryColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { Answer } from './answer.entity';
 import { Group } from './group.entity';
 
 @Entity('user_tb')
 export class User {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   user_uuid: string;
 
   @Column()
