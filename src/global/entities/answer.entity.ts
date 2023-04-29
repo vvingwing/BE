@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn, ManyToOne, OneToMany, ManyToMany, JoinTable, VirtualColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryColumn, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { User } from './user.entity';
 import { Question } from './question.entity';
 
