@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { User } from '../global/entities/user.entity';
 import { DataSource, Repository, Between } from 'typeorm';
 import { Question } from '../global/entities/question.entity';
@@ -8,7 +8,7 @@ import { QuestionDto } from './dto/question.dto';
 
 @Injectable()
 export class QuestionService {
-  constructor(private dataSource: DataSource) {}
+  constructor(private dataSource: DataSource) { }
   async createQuestion(questionDto: QuestionDto): Promise<void> {
     const question = this.dataSource.manager.create(Question, {
       question: questionDto.question,
@@ -93,30 +93,37 @@ export class QuestionService {
     }
     return result;
   }
-
-  async getAnswersPublic(question_uuid: string) {
-    // 퍼블릭은 대강 7일 // wip
-    let answerRepository: Repository<Answer> =
-      this.dataSource.getRepository(Answer);
-
-    const answers = await answerRepository.find({
-      where: {
-        question: {
-          question_uuid: question_uuid,
-        },
-        status: 'public',
-      },
-      relations: { user: true },
-    });
+  async getAnswersPublic(question_uuid: string, age_bound: [number, number]) { // 퍼블릭은 대강 7일 // wip
+    let answerRepository: Repository<Answer> = this.dataSource.getRepository(Answer);
+    let answers: Answer[];
+    if (age_bound) {
+      answers = await answerRepository.find({
+        where: {
+          question: {
+            question_uuid: question_uuid
+          },
+          status: "public",
+          user: {
+            age: Between(age_bound[0], age_bound[1])
+          }
+        }, relations: { user: true }
+      });
+    } else {
+      answers = await answerRepository.find({
+        where: {
+          question: {
+            question_uuid: question_uuid
+          },
+          status: "public"
+        }, relations: { user: true }
+      });
+    }
 
     let result = [];
     for (let i = 0; i < answers.length; i++) {
-      result.push({
-        answer: answers[i].answer,
-        created_at: answers[i].created_At,
-      });
+      result.push({ answer: answers[i].answer, created_at: answers[i].created_At });
     }
-    return result;
+    return result
   }
 
   async submitAnswer(
@@ -143,7 +150,7 @@ export class QuestionService {
         question: question,
       });
     } catch (e) {
-      return 'error!';
+      throw HttpStatus.BAD_REQUEST
     }
   }
 
