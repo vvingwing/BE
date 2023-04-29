@@ -8,6 +8,8 @@ import { UserModule } from './user/user.module';
 import { AuthService } from './auth/auth.service';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
+import { GroupModule } from './group/group.module';
+import { QuestionModule } from './question/question.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { AuthModule } from './auth/auth.module';
     }),
     UserModule,
     AuthModule,
+    GroupModule,
+    QuestionModule
   ],
 })
-export class AppModule {}
+export class AppModule { }
