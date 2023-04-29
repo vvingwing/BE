@@ -8,8 +8,8 @@ export class Question {
   @Column()
   question: string;
 
-  @Column({ type: 'timestamp' })
-  upload_date: Date;
+  @Column({ type: 'timestamp', nullable: true, default: null })
+  used_At: Date;
 
   @CreateDateColumn()
   created_At: Date;

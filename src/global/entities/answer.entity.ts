@@ -8,6 +8,9 @@ export class Answer {
   @Column()
   status: string;
 
+  @Column()
+  answer: string;
+
   @CreateDateColumn()
   created_At: Date;
 }
