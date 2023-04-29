@@ -17,10 +17,9 @@ export class GroupController {
   @Post('join')
   async joinGroup(
     @Query('user_uuid') user_uuid: string,
-    @Query('group_uuid') group_uuid: string,
     @Query('join_code') join_code: string,
   ): Promise<string> {
-    await this.groupService.joinGroup(user_uuid, group_uuid, join_code);
+    await this.groupService.joinGroup(user_uuid, join_code);
     return 'success';
   }
 

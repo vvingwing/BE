@@ -65,7 +65,17 @@ export class QuestionController {
   }
 
   @Get('/answer/public')
-  async getPublicAnswer(@Query('question_uuid') question_uuid: string) {
+  async getPublicAnswer(
+    @Query('question_uuid') question_uuid: string,
+    @Query('lower') lower: number,
+    @Query('upper') upper: number,
+  ) {
+    if (lower && upper) {
+      return await this.questionService.getAnswersPublic(question_uuid, [
+        lower,
+        upper,
+      ]);
+    }
     return await this.questionService.getAnswersPublic(question_uuid);
   }
 }
