@@ -8,7 +8,7 @@ import { QuestionDto } from './dto/question.dto';
 
 @Injectable()
 export class QuestionService {
-  constructor(private dataSource: DataSource) {}
+  constructor(private dataSource: DataSource) { }
   async createQuestion(questionDto: QuestionDto): Promise<void> {
     const question = this.dataSource.manager.create(Question, {
       question: questionDto.question,
@@ -55,7 +55,7 @@ export class QuestionService {
 
     const newq =
       nullquestions[Math.floor(Math.random() * nullquestions.length)];
-    newq.used_At = new Date();
+    newq.used_At = date;
 
     await questionRepository.save(newq);
 
