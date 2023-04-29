@@ -109,10 +109,5 @@ export class QuestionService {
         return await userRepository.find({ where: { user_uuid: user_uuid }, relations: { groups: true } });
     }
 
-    async getGroupInfo(group_uuid: string) {
-        const groupRepository: Repository<Group> = this.dataSource.getRepository(Group)
 
-        return await groupRepository.find({ where: { group_uuid: group_uuid }, relations: { users: true } })
-
-    }
 }   
