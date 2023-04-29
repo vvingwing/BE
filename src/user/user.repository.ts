@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import { UserDto } from './dto/user.dto';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../global/entities/user.entity';
-import { UserInfoType } from './types/userInfo.type';
+import { UserInfoType } from '../global/types/userInfo.type';
 
 @Injectable()
 export class UserRepository {
