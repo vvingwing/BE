@@ -1,10 +1,18 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from './user.entity';
 import { Question } from './question.entity';
 
 @Entity('answer_tb')
 export class Answer {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   answer_uuid: string;
 
   @Column()

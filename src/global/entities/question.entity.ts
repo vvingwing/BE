@@ -1,9 +1,15 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn, OneToMany } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Answer } from './answer.entity';
 
 @Entity('question_tb')
 export class Question {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   question_uuid: string;
 
   @Column()

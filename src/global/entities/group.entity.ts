@@ -1,9 +1,9 @@
-import { Column, Entity, PrimaryColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity('group_tb')
 export class Group {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   group_uuid: string;
 
   @Column()
@@ -13,5 +13,5 @@ export class Group {
   group_code: string;
 
   @ManyToMany(() => User, (user) => user.groups)
-  users: User[]
+  users: User[];
 }
