@@ -1,11 +1,9 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDto } from './dto/user.dto';
-import { UserInfoType } from './types/userInfo.type';
-import { LoginInfoDto } from './dto/loginInfo.dto';
-import { LocalGuard } from '../auth/guard/local.guard';
+import { UserInfoType } from '../global/types/userInfo.type';
 
-@Controller('user')
+@Controller('/auth/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

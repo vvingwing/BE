@@ -4,6 +4,8 @@ import { UserRepository } from '../user/user.repository';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
+import { UnauthorizedException } from '@nestjs/common/exceptions';
+import { payload } from '../global/types/payload.type';
 
 @Injectable()
 export class AuthService {
@@ -21,6 +23,23 @@ export class AuthService {
     }
 
     return bcrypt.compareSync(user_password, user.user_password);
+  }
+
+  async getTokenInfo(jwtToken: string) {
+    const jwtSecret = this.configService.get<string>('JWT_SECRET');
+
+    let decoded: payload;
+    try {
+      decoded = jwt.verify(jwtToken, jwtSecret);
+    } catch (e) {
+      throw new UnauthorizedException();
+    }
+
+    if (decoded.user_uuid) {
+      return decoded.user_uuid;
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 
   async getJWTToken(userdata) {
