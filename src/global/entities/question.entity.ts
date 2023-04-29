@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryColumn, OneToMany } from 'typeorm';
+import { Answer } from './answer.entity';
 
 @Entity('question_tb')
 export class Question {
@@ -8,9 +9,12 @@ export class Question {
   @Column()
   question: string;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', nullable: true, default: null })
   used_At: Date;
 
   @CreateDateColumn()
   created_At: Date;
+
+  @OneToMany(() => Answer, (Answer) => Answer.question)
+  answers: Answer[];
 }

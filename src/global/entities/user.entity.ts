@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { Answer } from './answer.entity';
+import { Group } from './group.entity';
 
 @Entity('user_tb')
 export class User {
@@ -19,4 +21,14 @@ export class User {
 
   @Column()
   user_password: string;
+
+  @OneToMany(() => Answer, (Answer) => Answer.user)
+  answers: Answer[];
+
+  @ManyToMany(() => Group, (group) => group.users)
+  @JoinTable()
+  groups: Group[];
+
+  @ManyToMany(() => Answer, (Answer) => Answer.liked_users)
+  liked_answers: Answer[]
 }
