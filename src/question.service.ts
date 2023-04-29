@@ -62,11 +62,18 @@ export class QuestionService {
     async getAnswersPublic(question_uuid: string) { // 퍼블릭은 대강 7일 // wip
         let answerRepository: Repository<Answer> = this.dataSource.getRepository(Answer);
 
-        const answers = answerRepository.
+        const answers = await answerRepository.find({
+            where: {
+                question: {
+                    question_uuid: question_uuid
+                },
+                status: "public"
+            }, relations: { user: true }
+        });
 
         let result = [];
         for (let i = 0; i < answers.length; i++) {
-            result.push({ answer: answers[i].answer, like_count: answers[i].like_count, created_at: answers[i].created_At });
+            result.push({ answer: answers[i].answer, created_at: answers[i].created_At });
         }
         return result
     }
