@@ -16,6 +16,18 @@ jobs:
 
     - name: Check out code
       uses: actions/checkout@v2
+      
+    - name: Create .env file
+      run: |
+        echo "NODE_ENV=production" >> .env
+        echo "MYSQL_DATABASE_HOST=${{ secrets.MYSQL_DATABASE_HOST }}" >> .env
+        echo "MYSQL_DATABASE_NAME=${{ secrets.MYSQL_DATABASE_NAME }}" >> .env
+        echo "MYSQL_DATABASE_PORT=${{ secrets.MYSQL_DATABASE_PORT }}" >> .env
+        echo "MYSQL_DATABASE_USER=${{ secrets.MYSQL_DATABASE_USER }}" >> .env
+        echo "MYSQL_DATABASE_PASSWORD=${{ secrets.MYSQL_DATABASE_PASSWORD }}" >> .env
+        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+        echo "JWT_EXPIRE=${{ secrets.JWT_EXPIRE }}" >> .env
+          cat .env
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -49,7 +61,6 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           whoami
-          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 953799088616.dkr.ecr.ap-northeast-2.amazonaws.com
           docker pull 953799088616.dkr.ecr.ap-northeast-2.amazonaws.com/github_action_test:latest
           sudo docker-compose up -d --force-recreate --remove-orphans -t 10
           sudo docker image prune --all --force
