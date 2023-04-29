@@ -178,7 +178,7 @@ export class QuestionService {
       this.dataSource.getRepository(User);
     return await userRepository.find({
       where: { user_uuid: user_uuid },
-      relations: { groups: true },
+      relations: { groups: { users: true } },
     });
   }
 }
