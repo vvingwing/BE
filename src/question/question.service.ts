@@ -3,6 +3,8 @@ import { User } from "../global/entities/user.entity";
 import { DataSource, Repository, Between } from "typeorm";
 import { Question } from "../global/entities/question.entity";
 import { Answer } from "../global/entities/answer.entity";
+import { error } from "console";
+import { Group } from "src/global/entities/group.entity";
 
 @Injectable()
 export class QuestionService {
@@ -10,10 +12,17 @@ export class QuestionService {
         private dataSource: DataSource
     ) { };
 
-    async getQuestion(date?: Date): Promise<Question> { // 해당 날짜의 질문을 가져옴
-
+    async getQuestion(date?: Date, uuid?: string): Promise<Question> { // 해당 날짜의 질문을 가져옴
         let questionRepository: Repository<Question> = this.dataSource.getRepository(Question);
 
+        if (uuid) {
+            const que = await questionRepository.findOne({ where: { question_uuid: uuid } })
+            if (!que) {
+                return que
+            } else {
+                throw error("No Question UUID");
+            }
+        }
         if (!date) {
             date = new Date();
         }
@@ -94,4 +103,16 @@ export class QuestionService {
         const answers = await answerRepository.find({ where: { user: { user_uuid: user_uuid } }, order: { created_At: "DESC" }, relations: { question: true } });
         return answers
     }
-}
+
+    async getMyInfo(user_uuid: string) {
+        const userRepository: Repository<User> = this.dataSource.getRepository(User);
+        return await userRepository.find({ where: { user_uuid: user_uuid }, relations: { groups: true } });
+    }
+
+    async getGroupInfo(group_uuid: string) {
+        const groupRepository: Repository<Group> = this.dataSource.getRepository(Group)
+
+        return await groupRepository.find({ where: { group_uuid: group_uuid }, relations: { users: true } })
+
+    }
+}   
