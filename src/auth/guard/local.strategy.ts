@@ -23,7 +23,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
       throw new HttpException('login failed', HttpStatus.UNAUTHORIZED);
     }
     return {
-      user_name: user_data.user_name,
+      user_uuid: user_data.user_uuid,
       user_nickname: user_data.nickname,
     };
   }
