@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { User } from "./global/entities/user.entity";
+import { User } from "../global/entities/user.entity";
 import { DataSource, Repository, Between } from "typeorm";
-import { Question } from "./global/entities/question.entity";
-import { Answer } from "./global/entities/answer.entity";
+import { Question } from "../global/entities/question.entity";
+import { Answer } from "../global/entities/answer.entity";
 
 @Injectable()
 export class QuestionService {
@@ -10,7 +10,7 @@ export class QuestionService {
         private dataSource: DataSource
     ) { };
 
-    async getQuestion(date?: Date): Promise<string> { // 해당 날짜의 질문을 가져옴
+    async getQuestion(date?: Date): Promise<Question> { // 해당 날짜의 질문을 가져옴
 
         let questionRepository: Repository<Question> = this.dataSource.getRepository(Question);
 
@@ -24,7 +24,7 @@ export class QuestionService {
         });
 
         if (questions) {
-            return questions[0].question;
+            return questions[0];
         }
 
         const nullquestions = await questionRepository.find({ where: { used_At: null } });
@@ -33,7 +33,7 @@ export class QuestionService {
 
         await questionRepository.save(newq);
 
-        return newq.question;
+        return newq;
 
     }
 
@@ -86,13 +86,12 @@ export class QuestionService {
         catch {
             return "error!";
         }
-
     }
 
     async getAllAnswers(user_uuid: string) {
         let answerRepository: Repository<Answer> = this.dataSource.getRepository(Answer);
 
-        const answers = await answerRepository.find({ where: { user: { user_uuid: user_uuid } }, order: { created_At: "DESC" } })
+        const answers = await answerRepository.find({ where: { user: { user_uuid: user_uuid } }, order: { created_At: "DESC" }, relations: { question: true } });
         return answers
     }
 }

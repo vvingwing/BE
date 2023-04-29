@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity('group_tb')
@@ -14,4 +14,7 @@ export class Group {
 
   @ManyToMany(() => User, (user) => user.groups)
   users: User[];
+
+  @CreateDateColumn()
+  created_At: Date
 }
