@@ -3,10 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MySQLConfigModule } from './global/config/config.module';
 import { MySQLConfigService } from './global/config/config.service';
 import { ConfigModule } from '@nestjs/config';
-import { UserService } from './user/user.service';
 import { UserModule } from './user/user.module';
-import { AuthService } from './auth/auth.service';
-import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { GroupModule } from './group/group.module';
 import { QuestionModule } from './question/question.module';
@@ -24,7 +21,7 @@ import { QuestionModule } from './question/question.module';
     UserModule,
     AuthModule,
     GroupModule,
-    QuestionModule
+    QuestionModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

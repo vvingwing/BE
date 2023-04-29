@@ -19,7 +19,7 @@ export class MySQLConfigService implements TypeOrmOptionsFactory {
       host: this.configService.get<string>('MYSQL_DATABASE_HOST'),
       database: this.configService.get<string>('MYSQL_DATABASE_NAME'),
       entities: [User, Group, Question, Answer],
-      synchronize: true,
+      synchronize: false,
     };
   }
 }

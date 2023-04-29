@@ -27,13 +27,13 @@ export class AuthService {
 
   async getTokenInfo(jwtToken: string) {
     const jwtSecret = this.configService.get<string>('JWT_SECRET');
-
-    let decoded: payload;
+    const decoded = jwt.verify(jwtToken, jwtSecret);
+    /*let decoded: payload;
     try {
       decoded = jwt.verify(jwtToken, jwtSecret);
     } catch (e) {
       throw new UnauthorizedException();
-    }
+    }*/
 
     if (decoded.user_uuid) {
       return decoded.user_uuid;
@@ -43,18 +43,14 @@ export class AuthService {
   }
 
   async getJWTToken(userdata) {
-    const { user_nickname } = userdata;
-    const jwtSecret = this.configService.get<string>('JWT_SECRET');
-    const jwtExpire = this.configService.get<string>('JWT_EXPIRE');
+    const { user_uuid } = userdata;
+    const jwtSecret = await this.configService.get<string>('JWT_SECRET');
+    const jwtExpire = await this.configService.get<string>('JWT_EXPIRE');
 
-    const registerJWTToken = jwt.sign(
-      { user_nickname: user_nickname },
-      jwtSecret,
-      {
-        algorithm: 'HS256',
-        expiresIn: jwtExpire,
-      },
-    );
+    const registerJWTToken = jwt.sign({ user_uuid: user_uuid }, jwtSecret, {
+      algorithm: 'HS256',
+      expiresIn: jwtExpire,
+    });
 
     return { registerJWTToken: registerJWTToken };
   }
