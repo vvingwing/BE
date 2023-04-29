@@ -78,7 +78,21 @@ export class QuestionService {
         return result
     }
 
-    async submitAnswer(answer: string, ispublic: boolean) {
+    async submitAnswer(question_uuid: string, user_uuid: string, answer: string, ispublic: boolean) {
+        let answerRepository: Repository<Answer> = this.dataSource.getRepository(Answer);
+        try {
+            let result = await answerRepository.save({ status: ispublic ? "public" : "private", answer: answer, user: { user_uuid: user_uuid }, question: { question_uuid: question_uuid } });
+        }
+        catch {
+            return "error!";
+        }
 
+    }
+
+    async getAllAnswers(user_uuid: string) {
+        let answerRepository: Repository<Answer> = this.dataSource.getRepository(Answer);
+
+        const answers = await answerRepository.find({ where: { user: { user_uuid: user_uuid } }, order: { created_At: "DESC" } })
+        return answers
     }
 }
