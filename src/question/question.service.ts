@@ -8,7 +8,7 @@ import { QuestionDto } from './dto/question.dto';
 
 @Injectable()
 export class QuestionService {
-  constructor(private dataSource: DataSource) { }
+  constructor(private dataSource: DataSource) {}
   async createQuestion(questionDto: QuestionDto): Promise<void> {
     const question = this.dataSource.manager.create(Question, {
       question: questionDto.question,
@@ -128,6 +128,7 @@ export class QuestionService {
       result.push({
         answer: answers[i].answer,
         created_at: answers[i].created_At,
+        age: answers[i].user.age,
       });
     }
     return result;
